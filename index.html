@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadeoresources - Auto Parts Store</title>
+  <style>
+    :root {
+      --temu-orange: #ff4700;
+      --temu-red: #e60012;
+      --temu-dark: #222222;
+      --temu-bg: #f4f4f4;
+      --wa-green: #25d366;
+      --border: #e5e5e5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--temu-bg);
+      color: var(--temu-dark);
+      padding-bottom: 30px;
+    }
+
+    .promo-bar {
+      background: var(--temu-red);
+      color: #fff;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 6px;
+    }
+
+    .temu-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: 2px solid var(--temu-orange);
+      padding: 10px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--temu-orange);
+      box-shadow: 0 2px 6px rgba(255, 71, 0, 0.25);
+      background-color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--temu-dark);
+      letter-spacing: -0.5px;
+      text-transform: lowercase;
+    }
+
+    .brand-name span {
+      color: var(--temu-orange);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .search-box {
+      display: flex;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 2px solid var(--temu-orange);
+      border-radius: 20px 0 0 20px;
+      outline: none;
+      font-size: 12px;
+    }
+
+    .search-box button {
+      background: var(--temu-orange);
+      color: #fff;
+      border: none;
+      padding: 0 12px;
+      border-radius: 0 20px 20px 0;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .cart-btn-nav {
+      background: #fff0eb;
+      border: 1px solid var(--temu-orange);
+      color: var(--temu-orange);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .cart-badge {
+      background: var(--temu-orange);
+      color: #fff;
+      font-size: 10px;
+      border-radius: 10px;
+      padding: 1px 6px;
+    }
+
+    .trust-strip {
+      display: flex;
+      justify-content: space-around;
+      background: #fff;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+      }
+    }
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: transform 0.15s ease;
+    }
+
+    .product-card:active {
+      transform: scale(0.98);
+    }
+
+    .card-preview-wrapper {
+      width: 100%;
+      height: 140px;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-details {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .part-sku {
+      font-size: 10px;
+      color: #777;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .product-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin: 4px 0 6px 0;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 28px;
+    }
+
+    .sales-count {
+      font-size: 10px;
+      color: #888;
+      margin-top: auto;
+      margin-bottom: 8px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-inquiry {
+      flex: 1;
+      background: var(--temu-orange);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 0;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 99999;
+    }
+
+    @media (min-width: 600px) {
+      .modal-overlay {
+        align-items: center;
+      }
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      border-radius: 16px 16px 0 0;
+      overflow-y: auto;
+      padding: 16px;
+      position: relative;
+      animation: slideUp 0.2s ease-out;
+    }
+
+    @media (min-width: 600px) {
+      .modal-content {
+        border-radius: 12px;
+      }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #eee;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: bold;
+      color: #555;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .modal-img-container {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      background: #fafafa;
+    }
+
+    .modal-main-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: zoom-in;
+    }
+
+    .modal-hint {
+      font-size: 10px;
+      color: #777;
+      text-align: center;
+      margin: 4px 0 10px 0;
+    }
+
+    .modal-sku {
+      font-size: 10px;
+      color: #777;
+      font-weight: 800;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 2px 0 10px 0;
+    }
+
+    .modal-desc-box {
+      background: #f9f9f9;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #444;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .modal-desc-box h4 {
+      color: var(--temu-dark);
+      margin-bottom: 4px;
+    }
+
+    .btn-wa-direct {
+      background: var(--wa-green);
+      color: #fff;
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12px;
+      text-decoration: none;
+      text-align: center;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .btn-modal-cart {
+      background: #fff0eb;
+      border: 1px solid var(--temu-orange);
+      color: var(--temu-orange);
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .cart-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      justify-content: flex-end;
+      z-index: 300000;
+    }
+
+    .cart-drawer-overlay.active {
+      display: flex;
+    }
+
+    .cart-drawer {
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      height: 100%;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .cart-header h2 {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .cart-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f9f9f9;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .cart-item img {
+      width: 45px;
+      height: 45px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .cart-item-details {
+      flex-grow: 1;
+    }
+
+    .cart-item-details h4 {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .remove-cart-item {
+      color: var(--temu-red);
+      font-weight: bold;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .delivery-section {
+      background: #f9f9f9;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .delivery-section h3 {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--temu-dark);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .delivery-field {
+      margin-bottom: 8px;
+    }
+
+    .delivery-field label {
+      display: block;
+      font-size: 10px;
+      font-weight: bold;
+      color: #666;
+      margin-bottom: 3px;
+    }
+
+    .delivery-field input, .delivery-field textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 11px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .delivery-field input:focus, .delivery-field textarea:focus {
+      border-color: var(--temu-orange);
+    }
+
+    .cart-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: auto;
+    }
+
+    .fs-lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 400000;
+      color: #fff;
+    }
+
+    .fs-lightbox.active {
+      display: flex;
+    }
+
+    .fs-lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+
+    .fs-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #fff;
+      font-size: 32px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .fs-title {
+      font-size: 13px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      padding: 16px;
+      background: #ffffff;
+      border-top: 1px solid #eee;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="promo-bar">⚡ FAST DIRECT DELIVERY ON ALL AUTO PARTS</div>
+
+  <header class="temu-header">
+    <div class="header-top">
+      <a href="#" class="brand-container">
+        <img src="https://i.postimg.cc/rFpnJP31/1787185613399.png" alt="Cadeoresources Logo" class="brand-logo-img">
+        <span class="brand-name">cadeo<span>resources</span></span>
+      </a>
+      <div class="header-right">
+        <div class="search-box">
+          <input type="text" id="partSearchInput" placeholder="Search part name or SKU...">
+          <button id="searchBtn">Search</button>
+        </div>
+        <button class="cart-btn-nav" id="cartNavBtn">📋 Inquiry List <span class="cart-badge" id="cartBadgeCount">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="trust-strip">
+    <span>⚡ Express Shipping</span>
+    <span>🛡️ Verified Fitment</span>
+    <span>💬 Direct Support</span>
+  </div>
+
+  <main class="product-grid" id="productGridContainer"></main>
+
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-content">
+      <button class="close-modal-btn" id="closeModalBtn">✕</button>
+      <div class="modal-img-container">
+        <img id="mImg" src="" class="modal-main-image" alt="Product Image">
+      </div>
+      <p class="modal-hint">🔍 Tap image for full screen view</p>
+      <span id="mSku" class="modal-sku"></span>
+      <h2 id="mTitle" class="modal-title"></h2>
+      <div class="modal-desc-box">
+        <h4>Product Details & Specification:</h4>
+        <p id="mDesc"></p>
+      </div>
+      <a id="mWaBtn" href="#" target="_blank" class="btn-wa-direct">Inquire directly via WhatsApp</a>
+      <button class="btn-modal-cart" id="modalAddToCartBtn">📋 Add to Inquiry List</button>
+    </div>
+  </div>
+
+  <!-- Cart / Inquiry Drawer -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay">
+    <div class="cart-drawer">
+      <div class="cart-header">
+        <h2>Your Parts Inquiry List</h2>
+        <button class="close-modal-btn" id="closeCartBtn">✕</button>
+      </div>
+      
+      <div class="cart-items-list" id="cartItemsList"></div>
+
+      <!-- Delivery Details Section -->
+      <div class="delivery-section" id="deliveryFormSection">
+        <h3>🚚 Delivery Details</h3>
+        <div class="delivery-field">
+          <label for="custName">Full Name</label>
+          <input type="text" id="custName" placeholder="Enter your full name">
+        </div>
+        <div class="delivery-field">
+          <label for="custPhone">Phone Number</label>
+          <input type="tel" id="custPhone" placeholder="Enter phone number">
+        </div>
+        <div class="delivery-field">
+          <label for="custAddress">Delivery Address</label>
+          <textarea id="custAddress" rows="2" placeholder="Street address, house/shop number..."></textarea>
+        </div>
+        <div class="delivery-field">
+          <label for="custCity">City / State</label>
+          <input type="text" id="custCity" placeholder="e.g. Asaba, Delta State">
+        </div>
+      </div>
+
+      <div class="cart-footer">
+        <a id="cartCheckoutWa" href="#" target="_blank" class="btn-wa-direct">Send Inquiry & Address via WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Lightbox -->
+  <div class="fs-lightbox" id="fullscreenLightbox">
+    <span class="fs-close" id="closeFsBtn">&times;</span>
+    <img id="fsImg" src="" alt="Fullscreen Image">
+    <div class="fs-title" id="fsTitle"></div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Cadeoresources. All rights reserved.</p>
+  </footer>
+
+  <!-- EMBEDDED JSON INVENTORY DATA -->
+  <script id="inventory-data" type="application/json">
+    [
+      {
+        "id": "AP-101",
+        "name": "Heavy Duty Front Ceramic Brake Pads & Rotor Set",
+        "partNumber": "BP-9231",
+        "salesCount": "1.2k+ requested",
+        "desc": "Premium heat-resistant ceramic brake pads engineered for silent operation, low dust output, and durable stopping power across harsh road conditions.",
+        "image": "https://images.unsplash.com/photo-1552830260-319765811029?w=500&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "AP-102",
+        "name": "Full Synthetic Engine Motor Oil 5W-30 (4L)",
+        "partNumber": "OIL-5W30",
+        "salesCount": "850+ requested",
+        "desc": "Advanced full synthetic formula designed for ultimate engine protection, reducing wear and sludge build-up in high-temperature environments.",
+        "image": "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=500&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "AP-103",
+        "name": "High Performance Engine Air Filter Element",
+        "partNumber": "OF-4421",
+        "salesCount": "2.1k+ requested",
+        "desc": "High-airflow filter mesh captures 99% of airborne contaminants, ensuring clean oxygen combustion for better horsepower and fuel efficiency.",
+        "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=500&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "AP-104",
+        "name": "12V Heavy Duty Automotive Car Battery",
+        "partNumber": "BAT-70AH",
+        "salesCount": "410+ requested",
+        "desc": "Maintenance-free lead-acid battery delivering consistent cold-cranking amps (CCA) for quick ignition and long charge retention.",
+        "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=500&auto=format&fit=crop&q=80"
+      }
+    ]
+  </script>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Parse embedded JSON data from script tag
+      const rawJsonData = document.getElementById('inventory-data').textContent;
+      const partsCatalog = JSON.parse(rawJsonData);
+
+      let cart = [];
+      let activeModalProductId = null;
+
+      const container = document.getElementById('productGridContainer');
+      const productModal = document.getElementById('productModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const mImg = document.getElementById('mImg');
+      const mSku = document.getElementById('mSku');
+      const mTitle = document.getElementById('mTitle');
+      const mDesc = document.getElementById('mDesc');
+      const mWaBtn = document.getElementById('mWaBtn');
+      const modalAddToCartBtn = document.getElementById('modalAddToCartBtn');
+
+      const cartNavBtn = document.getElementById('cartNavBtn');
+      const cartBadgeCount = document.getElementById('cartBadgeCount');
+      const cartDrawerOverlay = document.getElementById('cartDrawerOverlay');
+      const closeCartBtn = document.getElementById('closeCartBtn');
+      const cartItemsList = document.getElementById('cartItemsList');
+      const cartCheckoutWa = document.getElementById('cartCheckoutWa');
+
+      const custName = document.getElementById('custName');
+      const custPhone = document.getElementById('custPhone');
+      const custAddress = document.getElementById('custAddress');
+      const custCity = document.getElementById('custCity');
+
+      const fullscreenLightbox = document.getElementById('fullscreenLightbox');
+      const closeFsBtn = document.getElementById('closeFsBtn');
+      const fsImg = document.getElementById('fsImg');
+      const fsTitle = document.getElementById('fsTitle');
+
+      function renderProducts(items) {
+        container.innerHTML = '';
+
+        if (items.length === 0) {
+          container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px; color: #666;">No parts matched your search.</p>';
+          return;
+        }
+
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <div class="card-preview-wrapper">
+              <img src="${item.image}" alt="${item.name}" class="product-img">
+            </div>
+            <div class="card-details">
+              <span class="part-sku">SKU: ${item.partNumber}</span>
+              <h3 class="product-title">${item.name}</h3>
+              <span class="sales-count">${item.salesCount}</span>
+              <div class="card-actions">
+                <button class="btn-inquiry">Make Inquiry</button>
+              </div>
+            </div>
+          `;
+
+          const inquiryBtn = card.querySelector('.btn-inquiry');
+          inquiryBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+            openModal(item);
+          });
+
+          card.addEventListener('click', () => openModal(item));
+          container.appendChild(card);
+        });
+      }
+
+      function openModal(item) {
+        activeModalProductId = item.id;
+        mImg.src = item.image;
+        mSku.textContent = `SKU: ${item.partNumber}`;
+        mTitle.textContent = item.name;
+        mDesc.textContent = item.desc;
+
+        const waText = encodeURIComponent(`Hello Cadeoresources! I would like to make an inquiry about this part:\n- Item: ${item.name}\n- SKU: ${item.partNumber}`);
+        mWaBtn.href = `https://wa.me/?text=${waText}`;
+
+        productModal.classList.add('active');
+      }
+
+      closeModalBtn.addEventListener('click', () => productModal.classList.remove('active'));
+      productModal.addEventListener('click', (e) => {
+        if (e.target === productModal) productModal.classList.remove('active');
+      });
+
+      mImg.addEventListener('click', () => {
+        fsImg.src = mImg.src;
+        fsTitle.textContent = mTitle.textContent;
+        fullscreenLightbox.classList.add('active');
+      });
+
+      closeFsBtn.addEventListener('click', () => fullscreenLightbox.classList.remove('active'));
+      fullscreenLightbox.addEventListener('click', (e) => {
+        if (e.target === fullscreenLightbox) fullscreenLightbox.classList.remove('active');
+      });
+
+      modalAddToCartBtn.addEventListener('click', () => {
+        const item = partsCatalog.find(p => p.id === activeModalProductId);
+        if (item) {
+          addToCart(item);
+          productModal.classList.remove('active');
+          openCartDrawer();
+        }
+      });
+
+      function addToCart(item) {
+        const index = cart.findIndex(c => c.id === item.id);
+        if (index > -1) {
+          cart[index].qty += 1;
+        } else {
+          cart.push({ ...item, qty: 1 });
+        }
+        updateCartUI();
+      }
+
+      function removeFromCart(id) {
+        cart = cart.filter(c => c.id !== id);
+        updateCartUI();
+      }
+
+      function updateCartUI() {
+        const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
+        cartBadgeCount.textContent = totalQty;
+
+        cartItemsList.innerHTML = '';
+
+        if (cart.length === 0) {
+          cartItemsList.innerHTML = '<p style="text-align:center; color:#777; padding: 20px 0; font-size: 12px;">Your inquiry list is empty.</p>';
+        } else {
+          cart.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'cart-item';
+            el.innerHTML = `
+              <img src="${item.image}" alt="${item.name}">
+              <div class="cart-item-details">
+                <h4>${item.name} (Qty: ${item.qty})</h4>
+                <span style="font-size: 10px; color: #777;">SKU: ${item.partNumber}</span>
+              </div>
+              <button class="remove-cart-item">&times;</button>
+            `;
+
+            el.querySelector('.remove-cart-item').addEventListener('click', () => removeFromCart(item.id));
+            cartItemsList.appendChild(el);
+          });
+        }
+
+        buildWhatsAppLink();
+      }
+
+      function buildWhatsAppLink() {
+        const cartSummary = cart.length > 0 
+          ? cart.map(i => `${i.name} [SKU: ${i.partNumber}] (Qty: ${i.qty})`).join('\n- ')
+          : 'None selected';
+
+        const nameVal = custName.value.trim() || 'Not provided';
+        const phoneVal = custPhone.value.trim() || 'Not provided';
+        const addressVal = custAddress.value.trim() || 'Not provided';
+        const cityVal = custCity.value.trim() || 'Not provided';
+
+        const message = `Hello Cadeoresources! I would like to order/inquire about parts.
+
+📦 *PARTS INQUIRY LIST:*
+- ${cartSummary}
+
+🚚 *DELIVERY DETAILS:*
+- *Name:* ${nameVal}
+- *Phone:* ${phoneVal}
+- *Address:* ${addressVal}
+- *City/State:* ${cityVal}`;
+
+        cartCheckoutWa.href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      }
+
+      [custName, custPhone, custAddress, custCity].forEach(input => {
+        input.addEventListener('input', buildWhatsAppLink);
+      });
+
+      cartNavBtn.addEventListener('click', openCartDrawer);
+      closeCartBtn.addEventListener('click', closeCartDrawer);
+
+      function openCartDrawer() { cartDrawerOverlay.classList.add('active'); }
+      function closeCartDrawer() { cartDrawerOverlay.classList.remove('active'); }
+
+      cartDrawerOverlay.addEventListener('click', (e) => {
+        if (e.target === cartDrawerOverlay) closeCartDrawer();
+      });
+
+      document.getElementById('partSearchInput').addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const filtered = partsCatalog.filter(p =>
+          p.name.toLowerCase().includes(query) ||
+          p.partNumber.toLowerCase().includes(query)
+        );
+        renderProducts(filtered);
+      });
+
+      renderProducts(partsCatalog);
+    });
+  </script>
+</body>
+</html>
